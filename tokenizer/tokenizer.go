@@ -6,12 +6,12 @@ import (
 	"regexp"
 )
 
-// TokenKind represents type of token (for example, space, or open paren).
-type TokenKind int
+// Type represents type of token (for example, space, or open paren).
+type Type int
 
 const (
 	// Space represents whitespace, newlines, and so on.
-	Space TokenKind = iota
+	Space Type = iota
 	// OpenParen represents '('.
 	OpenParen
 	// CloseParen represents '('.
@@ -26,15 +26,15 @@ const (
 
 // Token is one meaningful chunk of substring.
 type Token struct {
-	// Kind tells which type this token is.
-	Kind TokenKind
+	// Type tells which type this token is.
+	Type Type
 	// Str is the original substring that corresponds to this token.
 	Str string
 }
 
 // String returns a description string of a token for debugging.
 func (t *Token) String() string {
-	return fmt.Sprintf("[%s]", t.Str)
+	return fmt.Sprintf("<%s>", t.Str)
 }
 
 // Tokenize splits s into tokens.
@@ -78,14 +78,14 @@ var subTokenizers = []tokenizer{
 }
 
 type regexpTokenizer struct {
-	kind TokenKind
-	re   *regexp.Regexp
+	tokenType Type
+	re        *regexp.Regexp
 }
 
-func newRegexpTokenizer(kind TokenKind, re *regexp.Regexp) *regexpTokenizer {
+func newRegexpTokenizer(tokenType Type, re *regexp.Regexp) *regexpTokenizer {
 	return &regexpTokenizer{
-		kind: kind,
-		re:   re,
+		tokenType: tokenType,
+		re:        re,
 	}
 }
 
@@ -99,7 +99,7 @@ func (rt *regexpTokenizer) Tokenize(s string) (t *Token, rest string, ok bool) {
 		return nil, s, false
 	}
 	tok := &Token{
-		Kind: rt.kind,
+		Type: rt.tokenType,
 		Str:  s[start:end],
 	}
 	return tok, s[end:], true

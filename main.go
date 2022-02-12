@@ -1,11 +1,26 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 
+	"github.com/soishi1/toylisp/parser"
 	"github.com/soishi1/toylisp/tokenizer"
 )
 
 func main() {
-	fmt.Println(tokenizer.Tokenize(`(a(((((((abc(("""" )"a\"")))(10((1 a`))
+	scanner := bufio.NewScanner(os.Stdin)
+	for scanner.Scan() {
+		tokens, err := tokenizer.Tokenize(scanner.Text())
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println(tokens)
+		sexps, err := parser.Parse(tokens)
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println(sexps)
+	}
 }
