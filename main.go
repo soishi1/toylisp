@@ -5,12 +5,14 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/soishi1/toylisp/evaluator"
 	"github.com/soishi1/toylisp/parser"
 	"github.com/soishi1/toylisp/tokenizer"
 )
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
+	env := evaluator.NewEnv()
 	for scanner.Scan() {
 		tokens, err := tokenizer.Tokenize(scanner.Text())
 		if err != nil {
@@ -22,5 +24,12 @@ func main() {
 			fmt.Println(err)
 		}
 		fmt.Println(sexps)
+		for i := range sexps {
+			value, err := env.Eval(sexps[i])
+			if err != nil {
+				fmt.Println(err)
+			}
+			fmt.Println(value)
+		}
 	}
 }
