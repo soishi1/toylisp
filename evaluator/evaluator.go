@@ -23,8 +23,15 @@ const (
 )
 
 type Value struct {
+	*sexpressions.SExp
 	valueType ValueType
 	value     interface{}
+}
+
+type LambdaValue struct {
+	args []string
+	body []*sexpressions.SExp
+	env  *Env
 }
 
 func (v *Value) String() string {
@@ -80,7 +87,7 @@ func (e *Env) Eval(sexp *sexpressions.SExp) (result *Value, err error) {
 	case sexpressions.StringType, sexpressions.IntType:
 		return &Value{valueType: SExp, value: sexp}, nil
 	case sexpressions.ListType:
-		return e.evalList(sexp)
+		return Nil, nil
 	case sexpressions.SymbolType:
 		symbol, _ := sexp.AsSymbol()
 		value, ok := e.Lookup(symbol)
@@ -90,23 +97,4 @@ func (e *Env) Eval(sexp *sexpressions.SExp) (result *Value, err error) {
 		return value, nil
 	}
 	return nil, fmt.Errorf("failed to evaluate %v (unknown sexpression type)", sexp)
-}
-
-func (e *Env) evalList(list *sexpressions.SExp) (result *Value, err error) {
-	sexps, _ := list.AsList()
-	if len(sexps) == 0 {
-		return Nil, nil
-	}
-
-	first := sexps[0]
-	firstSymbol, ok := first.AsSymbol()
-	if ok {
-		switch firstSymbol {
-		case "lambda":
-		case "if":
-		case "set":
-		case "quote":
-		}
-	}
-	return nil, nil
 }

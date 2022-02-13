@@ -21,9 +21,6 @@ type SExp struct {
 }
 
 func (s *SExp) AsList() (value []*SExp, ok bool) {
-	if s == nil {
-		return nil, true
-	}
 	if s.Type != ListType {
 		return nil, false
 	}
@@ -34,9 +31,6 @@ func (s *SExp) AsList() (value []*SExp, ok bool) {
 }
 
 func (s *SExp) AsSymbol() (value string, ok bool) {
-	if s == nil {
-		return "nil", true
-	}
 	if s.Type != SymbolType {
 		return "", false
 	}
