@@ -17,17 +17,20 @@ func main() {
 		tokens, err := tokenizer.Tokenize(scanner.Text())
 		if err != nil {
 			fmt.Println(err)
+			continue
 		}
 		fmt.Println(tokens)
 		sexps, err := parser.Parse(tokens)
 		if err != nil {
 			fmt.Println(err)
+			continue
 		}
 		fmt.Println(sexps)
 		for i := range sexps {
 			value, err := env.Eval(sexps[i])
 			if err != nil {
 				fmt.Println(err)
+				continue
 			}
 			fmt.Println(value)
 		}

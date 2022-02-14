@@ -51,6 +51,11 @@ func (s *SExp) AsString() (value string, ok bool) {
 	return s.Value.(string), true
 }
 
+func (s *SExp) IsNil() bool {
+	list, ok := s.AsList()
+	return ok && len(list) == 0
+}
+
 func (s *SExp) String() string {
 	if list, ok := s.AsList(); ok {
 		var strs []string
