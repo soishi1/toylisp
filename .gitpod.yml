@@ -1,6 +1,6 @@
 
 tasks:
   - init: |
-      echo 'TODO: build project'
+      go build main.go
     command: |
       go run main.go
